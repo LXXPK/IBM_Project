@@ -1,0 +1,32 @@
+version: "3.8"
+services:
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: eventsphere-backend
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGO_URI=mongodb+srv://reddykiran9611:mQFjzzKzf1etlznG@cluster1.liwfb.mongodb.net/event_registration?retryWrites=true&w=majority&appName=Cluster1
+      - JWT_SECRET=Kiran
+    networks:
+      - eventsphere_network
+  
+  frontend:
+    build:
+      context: ./user
+      dockerfile: Dockerfile
+    container_name: eventsphere-frontend
+    ports:
+      - "3000:3000" # Expose React development server port 3000 to host
+    environment:
+      - REACT_APP_API_URL=http://eventsphere-backend:5000  # Make sure React app connects to backend
+    depends_on:
+      - backend
+    networks:
+      - eventsphere_network
+
+networks:
+  eventsphere_network:
+    driver: bridge
