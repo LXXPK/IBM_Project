@@ -1,0 +1,71 @@
+.view-events-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .view-events-title {
+    text-align: center;
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .error-message {
+    color: red;
+    font-size: 1rem;
+    text-align: center;
+  }
+  
+  .no-events {
+    text-align: center;
+    color: #555;
+    font-size: 1rem;
+  }
+  
+  .events-list {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .event-card {
+    background: #ffffff;
+    margin: 15px 0;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .event-name {
+    font-size: 1.2rem;
+    color: #333;
+    margin: 0 0 5px 0;
+  }
+  
+  .event-date {
+    font-size: 0.9rem;
+    color: #777;
+  }
+  
+  .delete-button {
+    padding: 8px 15px;
+    font-size: 0.9rem;
+    color: white;
+    background: #e74c3c;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+  }
+  
+  .delete-button:hover {
+    background: #c0392b;
+  }
+  

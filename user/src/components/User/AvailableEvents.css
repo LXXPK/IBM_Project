@@ -1,0 +1,70 @@
+.available-events-container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
+    background: #f5f5f5;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .events-title {
+    text-align: center;
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 25px;
+  }
+  
+  .error-message {
+    color: red;
+    font-size: 1rem;
+    text-align: center;
+  }
+  
+  .no-events {
+    text-align: center;
+    color: #777;
+    font-size: 1.1rem;
+  }
+  
+  .events-list {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .event-card {
+    background: #fff;
+    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .event-name {
+    font-size: 1.3rem;
+    color: #444;
+  }
+  
+  .event-date {
+    font-size: 1rem;
+    color: #888;
+  }
+  
+  .register-button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    color: white;
+    background: #3498db;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+  }
+  
+  .register-button:hover {
+    background: #2980b9;
+  }
+  

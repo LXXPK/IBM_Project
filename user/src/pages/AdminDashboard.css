@@ -1,0 +1,31 @@
+.admin-dashboard {
+    background: linear-gradient(135deg, #3b8d99, #6b8e23);
+    min-height: 100vh;
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .dashboard-container {
+    margin: 2rem auto;
+    width: 90%;
+    max-width: 1200px;
+    padding: 2rem;
+    background: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+  }
+  
+  .dashboard-container h1 {
+    text-align: center;
+    color: #4CAF50;
+    font-weight: bold;
+  }
+  
+  @media (max-width: 768px) {
+    .dashboard-container {
+      width: 95%;
+      padding: 1rem;
+    }
+  }
+  
