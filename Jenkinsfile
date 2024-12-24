@@ -75,17 +75,24 @@ pipeline {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                         // Docker Hub login
-                        bat 'echo %DOCKER_PASSWORD% | docker login -u %DOCKER_USERNAME% --password-stdin'
+                        bat """
+                            docker login -u %DOCKER_USERNAME% -p %DOCKER_PASSWORD%
+                        """
                         
                         // Tag and publish backend image
-                        bat 'docker tag eventsphere-backend %DOCKER_USERNAME%/eventsphere-backend:latest'
-                        bat 'docker push %DOCKER_USERNAME%/eventsphere-backend:latest'
-
+                        bat """
+                            docker tag eventsphere-backend %DOCKER_USERNAME%/eventsphere-backend:latest
+                            docker push %DOCKER_USERNAME%/eventsphere-backend:latest
+                        """
+                        
                         // Tag and publish frontend image
-                        bat 'docker tag eventsphere-frontend %DOCKER_USERNAME%/eventsphere-frontend:latest'
-                        bat 'docker push %DOCKER_USERNAME%/eventsphere-frontend:latest'
+                        bat """
+                            docker tag eventsphere-frontend %DOCKER_USERNAME%/eventsphere-frontend:latest
+                            docker push %DOCKER_USERNAME%/eventsphere-frontend:latest
+                        """
                     }
                 }
+
             }
         }
     }
