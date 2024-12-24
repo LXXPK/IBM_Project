@@ -77,12 +77,12 @@ pipeline {
                     '''
 
                     // Apply Kubernetes manifests for both backend and frontend
-                    bat 'kubectl apply -f deploy/backend-deployment.yaml'
-                    bat 'kubectl apply -f deploy/frontend-deployment.yaml'
+                    bat 'minikube kubectl apply -f deploy/backend-deployment.yaml'
+                    bat 'minikube kubectl apply -f deploy/frontend-deployment.yaml'
 
                     // Check the deployment status
-                    bat 'kubectl get pods'
-                    bat 'kubectl get services'
+                    bat 'minikube kubectl get pods'
+                    bat 'minikube kubectl get services'
                 }
             }
         }
@@ -90,8 +90,8 @@ pipeline {
             steps {
                 script {
                     // Port-forward the services for access on local machine
-                    bat 'kubectl port-forward service/eventsphere-backend 5000:5000'
-                    bat 'kubectl port-forward service/eventsphere-frontend 3000:3000'
+                    bat 'minikube kubectl port-forward service/eventsphere-backend 5000:5000'
+                    bat 'minikube kubectl port-forward service/eventsphere-frontend 3000:3000'
                 }
             }
         }
