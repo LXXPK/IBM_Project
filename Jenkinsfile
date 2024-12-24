@@ -1,7 +1,7 @@
-pipeline { 
+pipeline {
     agent any
     environment {
-        MONGO_URI = credentials('mongo-uri-id') 
+        MONGO_URI = credentials('mongo-uri-id')
         JWT_SECRET = credentials('jwt-secret-id')
     }
     stages {
@@ -52,14 +52,6 @@ pipeline {
                 }
             }
         }
-        stage('Run Containers') {
-            steps {
-                script {
-                    bat 'docker-compose down'
-                    bat 'docker-compose up -d'
-                }
-            }
-        }
         stage('Publish Docker Images to Registry') {
             steps {
                 script {
@@ -73,24 +65,30 @@ pipeline {
                 }
             }
         }
-        // Deploy to Minikube
         stage('Deploy to Minikube') {
             steps {
                 script {
-                    bat 'minikube -p minikube docker-env --shell cmd > minikube-docker-env.bat'
-                    bat 'call minikube-docker-env.bat'
+                    // Set Docker environment to Minikube
+                    bat '@FOR /f "tokens=*" %i IN (\'minikube docker-env\') DO @%i'
 
-                    // Apply Kubernetes manifests
+                    // Apply Kubernetes manifests for both backend and frontend
                     bat 'kubectl apply -f backend-deployment.yaml'
                     bat 'kubectl apply -f frontend-deployment.yaml'
 
-                    // Check Kubernetes status
-                    bat 'kubectl get pods -A'
-                    bat 'kubectl get services -A'
+                    // Check the deployment status
+                    bat 'kubectl get pods'
+                    bat 'kubectl get services'
                 }
             }
         }
-
-
+        stage('Port-Forward to Local Machine') {
+            steps {
+                script {
+                    // Port-forward the services for access on local machine
+                    bat 'kubectl port-forward service/eventsphere-backend 5000:5000'
+                    bat 'kubectl port-forward service/eventsphere-frontend 3000:3000'
+                }
+            }
+        }
     }
 }
