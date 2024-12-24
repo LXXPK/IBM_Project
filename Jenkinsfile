@@ -77,20 +77,20 @@ pipeline {
         stage('Deploy to Minikube') {
             steps {
                 script {
-                    // Set Docker environment for Minikube in Windows (no 'eval')
                     bat 'minikube -p minikube docker-env --shell cmd > minikube-docker-env.bat'
-                    bat 'call minikube-docker-env.bat'  // Apply the environment variables
+                    bat 'call minikube-docker-env.bat'
 
                     // Apply Kubernetes manifests
                     bat 'kubectl apply -f backend-deployment.yaml'
                     bat 'kubectl apply -f frontend-deployment.yaml'
 
-                    // Check the deployment status
-                    bat 'kubectl get pods'
-                    bat 'kubectl get services'
+                    // Check Kubernetes status
+                    bat 'kubectl get pods -A'
+                    bat 'kubectl get services -A'
                 }
             }
         }
+
 
     }
 }
