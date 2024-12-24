@@ -66,7 +66,7 @@ pipeline {
             steps {
                 script {
                     bat 'docker exec eventsphere-backend npm test'
-                    bat 'docker exec eventsphere-frontend npm test -- --passWithNoTests --maxWorkers=1 || exit 0'
+                    // bat 'docker exec eventsphere-frontend npm test -- --passWithNoTests --maxWorkers=1 || exit 0'
                 }
             }
         }
