@@ -65,6 +65,13 @@ pipeline {
                 }
             }
         }
+        stage('Set Minikube Context') {
+            steps {
+                script {
+                    bat 'minikube update-context'
+                }
+            }
+        }
         stage('Deploy to Minikube') {
             steps {
                 script {
