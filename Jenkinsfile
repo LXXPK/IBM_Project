@@ -69,7 +69,12 @@ pipeline {
             steps {
                 script {
                     // Set Docker environment to Minikube
-                    bat '@FOR /f "tokens=*" %i IN (\'minikube docker-env\') DO @%i'
+                     // Set Minikube Docker environment
+                    bat '''
+                    minikube docker-env > docker-env.txt
+                    for /f "tokens=1,2,*" %%a in (docker-env.txt) do set %%a=%%b %%c
+                    del docker-env.txt
+                    '''
 
                     // Apply Kubernetes manifests for both backend and frontend
                     bat 'kubectl apply -f backend-deployment.yaml'
