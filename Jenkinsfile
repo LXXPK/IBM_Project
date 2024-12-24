@@ -11,8 +11,8 @@ pipeline {
                 script {
                     // Write environment variables into the .env file
                     bat '''
-                    echo MONGO_URI=${MONGO_URI} > .env
-                    echo JWT_SECRET=${JWT_SECRET} >> .env
+                    echo MONGO_URI="%MONGO_URI%" > .env
+                    echo JWT_SECRET="%JWT_SECRET%" >> .env
                     '''
                 }
             }
