@@ -69,7 +69,6 @@ pipeline {
             steps {
                 script {
                     // Set Docker environment to Minikube
-                     // Set Minikube Docker environment
                     bat '''
                     minikube docker-env > docker-env.txt
                     for /f "tokens=1,2,*" %%a in (docker-env.txt) do set %%a=%%b %%c
@@ -77,8 +76,8 @@ pipeline {
                     '''
 
                     // Apply Kubernetes manifests for both backend and frontend
-                    bat 'minikube kubectl apply -f deploy/backend-deployment.yaml'
-                    bat 'minikube kubectl apply -f deploy/frontend-deployment.yaml'
+                    bat 'minikube kubectl -- apply -f deploy/backend-deployment.yaml'
+                    bat 'minikube kubectl -- apply -f deploy/frontend-deployment.yaml'
 
                     // Check the deployment status
                     bat 'minikube kubectl get pods'
@@ -86,14 +85,16 @@ pipeline {
                 }
             }
         }
+
         stage('Port-Forward to Local Machine') {
             steps {
                 script {
-                    // Port-forward the services for access on local machine
+                    // Port-forward the services for access on local machine using minikube kubectl
                     bat 'minikube kubectl port-forward service/eventsphere-backend 5000:5000'
                     bat 'minikube kubectl port-forward service/eventsphere-frontend 3000:3000'
                 }
             }
         }
+
     }
 }
