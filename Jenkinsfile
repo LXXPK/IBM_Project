@@ -77,8 +77,8 @@ pipeline {
                     '''
 
                     // Apply Kubernetes manifests for both backend and frontend
-                    bat 'kubectl apply -f backend-deployment.yaml'
-                    bat 'kubectl apply -f frontend-deployment.yaml'
+                    bat 'kubectl apply -f deploy/backend-deployment.yaml'
+                    bat 'kubectl apply -f deploy/frontend-deployment.yaml'
 
                     // Check the deployment status
                     bat 'kubectl get pods'
