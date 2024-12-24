@@ -1,18 +1,16 @@
-pipeline {
+pipeline { 
     agent any
     environment {
-        // Fetch credentials from Jenkins Credential Store
-        MONGO_URI = credentials('mongo-uri-id') // Replace with your Jenkins credential ID
-        JWT_SECRET = credentials('jwt-secret-id') // Replace with your Jenkins credential ID
+        MONGO_URI = credentials('mongo-uri-id') 
+        JWT_SECRET = credentials('jwt-secret-id')
     }
     stages {
         stage('Prepare Environment') {
             steps {
                 script {
-                    // Write environment variables into the .env file
                     bat '''
-                    echo MONGO_URI="%MONGO_URI%" > .env
-                    echo JWT_SECRET="%JWT_SECRET%" >> .env
+                    echo MONGO_URI=${MONGO_URI} > .env
+                    echo JWT_SECRET=${JWT_SECRET} >> .env
                     '''
                 }
             }
@@ -62,38 +60,36 @@ pipeline {
                 }
             }
         }
-        stage('Test Containers') {
-            steps {
-                script {
-                    bat 'docker exec eventsphere-backend npm test'
-                    // bat 'docker exec eventsphere-frontend npm test -- --passWithNoTests --maxWorkers=1 || exit 0'
-                }
-            }
-        }
         stage('Publish Docker Images to Registry') {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                        // Docker Hub login
-                        bat """
-                            docker login -u %DOCKER_USERNAME% -p %DOCKER_PASSWORD%
-                        """
-                        
-                        // Tag and publish backend image
-                        bat """
-                            docker tag eventsphere-backend %DOCKER_USERNAME%/eventsphere-backend:latest
-                            docker push %DOCKER_USERNAME%/eventsphere-backend:latest
-                        """
-                        
-                        // Tag and publish frontend image
-                        bat """
-                            docker tag eventsphere-frontend %DOCKER_USERNAME%/eventsphere-frontend:latest
-                            docker push %DOCKER_USERNAME%/eventsphere-frontend:latest
-                        """
+                        bat 'docker login -u %DOCKER_USERNAME% -p %DOCKER_PASSWORD%'
+                        bat 'docker tag eventsphere-backend %DOCKER_USERNAME%/eventsphere-backend:latest'
+                        bat 'docker push %DOCKER_USERNAME%/eventsphere-backend:latest'
+                        bat 'docker tag eventsphere-frontend %DOCKER_USERNAME%/eventsphere-frontend:latest'
+                        bat 'docker push %DOCKER_USERNAME%/eventsphere-frontend:latest'
                     }
                 }
-
             }
         }
-    }
+        // Deploy to Minikube
+        stage('Deploy to Minikube') {
+            steps {
+                script {
+                    // Set Docker environment for Minikube in Windows (no 'eval')
+                    bat 'minikube -p minikube docker-env --shell cmd > minikube-docker-env.bat'
+                    bat 'call minikube-docker-env.bat'  // Apply the environment variables
+
+                    // Apply Kubernetes manifests
+                    bat 'kubectl apply -f backend-deployment.yaml'
+                    bat 'kubectl apply -f frontend-deployment.yaml'
+
+                    // Check the deployment status
+                    bat 'kubectl get pods'
+                    bat 'kubectl get services'
+                }
+            }
+        }
+
 }

@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eventsphere-backend
+spec:
+  replicas: 1  # Set the number of replicas
+  selector:
+    matchLabels:
+      app: eventsphere-backend
+  template:
+    metadata:
+      labels:
+        app: eventsphere-backend
+    spec:
+      containers:
+      - name: backend
+        image: kiran186/eventsphere-backend:latest
+        ports:
+        - containerPort: 5000
+        env:
+        - name: MONGO_URI
+          valueFrom:
+            secretKeyRef:
+              name: mongo-uri-secret
+              key: mongo-uri  # Key inside the secret
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: jwt-secret
+              key: jwt-secret  # Key inside the secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: eventsphere-backend
+spec:
+  selector:
+    app: eventsphere-backend
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+  type: ClusterIP
