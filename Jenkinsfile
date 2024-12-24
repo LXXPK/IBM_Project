@@ -41,6 +41,7 @@ pipeline {
         stage('Run Containers') {
             steps {
                 script {
+                    bat 'docker-compose down'
                     bat 'docker-compose up -d'
                 }
             }
