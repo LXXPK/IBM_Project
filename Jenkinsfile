@@ -68,40 +68,40 @@ pipeline {
         stage('Set Minikube Context') {
             steps {
                 script {
-                    bat 'minikube update-context'
+                    bat '''
+                    minikube status || minikube start
+                    minikube update-context
+                    '''
                 }
             }
         }
         stage('Deploy to Minikube') {
             steps {
                 script {
-                    // Set Docker environment to Minikube
-                    bat '''
-                    minikube docker-env > docker-env.txt
-                    for /f "tokens=1,2,*" %%a in (docker-env.txt) do set %%a=%%b %%c
-                    del docker-env.txt
-                    '''
-
-                    // Apply Kubernetes manifests for both backend and frontend
-                    bat 'minikube kubectl -- apply -f deploy/backend-deployment.yaml'
-                    bat 'minikube kubectl -- apply -f deploy/frontend-deployment.yaml'
+                    // Apply Kubernetes manifests for backend and frontend deployments
+                    bat 'kubectl apply -f deploy/backend-deployment.yaml'
+                    bat 'kubectl apply -f deploy/frontend-deployment.yaml'
 
                     // Check the deployment status
-                    bat 'minikube kubectl get pods'
-                    bat 'minikube kubectl get services'
+                    bat 'kubectl rollout status deployment/eventsphere-backend'
+                    bat 'kubectl rollout status deployment/eventsphere-frontend'
+
+                    // Verify the running pods and services
+                    bat 'kubectl get pods'
+                    bat 'kubectl get services'
                 }
             }
         }
-
         stage('Port-Forward to Local Machine') {
             steps {
                 script {
-                    // Port-forward the services for access on local machine using minikube kubectl
-                    bat 'minikube kubectl port-forward service/eventsphere-backend 5000:5000'
-                    bat 'minikube kubectl port-forward service/eventsphere-frontend 3000:3000'
+                    // Forward the backend service to localhost:5000
+                    bat 'start "" cmd /c "kubectl port-forward service/eventsphere-backend 5000:5000"'
+
+                    // Forward the frontend service to localhost:3000
+                    bat 'start "" cmd /c "kubectl port-forward service/eventsphere-frontend 3000:3000"'
                 }
             }
         }
-
     }
 }
