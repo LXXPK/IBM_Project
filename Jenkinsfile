@@ -65,13 +65,20 @@ pipeline {
                 }
             }
         }
+        stage('Check PATH') {
+            steps {
+                script {
+                    bat 'echo %PATH%'
+                }
+            }
+        }
+
         stage('Set Minikube Context') {
             steps {
                 script {
-                    bat '''
-                    minikube status || minikube start
-                    minikube update-context
-                    '''
+                   bat '"C:\\Program Files\\Kubernetes\\Minikube\\minikube.exe" status || "C:\\Program Files\\Kubernetes\\Minikube\\minikube.exe" start'
+                    bat '"C:\\Program Files\\Kubernetes\\Minikube\\minikube.exe" update-context'
+
                 }
             }
         }
