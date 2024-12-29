@@ -76,7 +76,8 @@ pipeline {
         stage('Set Minikube Context') {
             steps {
                 script {
-                   bat '"C:\\Program Files\\Kubernetes\\Minikube\\minikube.exe" status || "C:\\Program Files\\Kubernetes\\Minikube\\minikube.exe" start'
+                   bat '"C:\\Program Files\\Kubernetes\\Minikube\\minikube.exe" start'
+                //    bat '"C:\\Program Files\\Kubernetes\\Minikube\\minikube.exe" status || "C:\\Program Files\\Kubernetes\\Minikube\\minikube.exe" start'
                     bat '"C:\\Program Files\\Kubernetes\\Minikube\\minikube.exe" update-context'
 
                 }
