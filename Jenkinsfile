@@ -71,15 +71,15 @@ pipeline {
                 }
             }
         }
-        stage('Create Kubernetes Secrets') {
-            steps {
-                script {
-                    // Create Mongo URI and JWT secrets
-                    bat 'kubectl create secret generic mongo-uri-secret --from-literal=mongo-uri=%MONGO_URI% || true'
-                    bat 'kubectl create secret generic jwt-secret --from-literal=jwt-secret=%JWT_SECRET% || true'
-                }
-            }
-        }
+        // stage('Create Kubernetes Secrets') {
+        //     steps {
+        //         script {
+        //             // Create Mongo URI and JWT secrets
+        //             bat 'kubectl create secret generic mongo-uri-secret --from-literal=mongo-uri=%MONGO_URI% || true'
+        //             bat 'kubectl create secret generic jwt-secret --from-literal=jwt-secret=%JWT_SECRET% || true'
+        //         }
+        //     }
+        // }
         stage('Deploy to IBM Kubernetes Service') {
             steps {
                 script {
