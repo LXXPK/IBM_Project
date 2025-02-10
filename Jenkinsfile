@@ -3,6 +3,7 @@ pipeline {
     environment {
         MONGO_URI = credentials('mongo-uri-id')
         JWT_SECRET = credentials('jwt-secret-id')
+        IBM_API_KEY = credentials('ibmcloud-apikey-id') // Add your IBM Cloud API key as a credential
     }
     stages {
         stage('Prepare Environment') {
@@ -47,67 +48,44 @@ pipeline {
         stage('Build Docker Images') {
             steps {
                 script {
-                    bat 'docker build -t ibm-eventspeare/eventsphere-backend ./server'
-                    bat 'docker build -t ibm-eventspeare/eventsphere-frontend ./user'
+                    bat 'docker build -t icr.io/ibm-eventspeare/backend-service:latest ./server'
+                    bat 'docker build -t icr.io/ibm-eventspeare/front-service:latest ./user'
                 }
             }
         }
-        stage('Publish Docker Images to Registry') {
+        stage('Login to IBM Cloud and IBM Container Registry') {
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                        bat 'docker login -u %DOCKER_USERNAME% -p %DOCKER_PASSWORD%'
-                        bat 'docker tag eventsphere-backend %DOCKER_USERNAME%/eventsphere-backend:latest'
-                        bat 'docker push %DOCKER_USERNAME%/eventsphere-backend:latest'
-                        bat 'docker tag eventsphere-frontend %DOCKER_USERNAME%/eventsphere-frontend:latest'
-                        bat 'docker push %DOCKER_USERNAME%/eventsphere-frontend:latest'
-                    }
+                    bat 'ibmcloud login --apikey %IBM_API_KEY%'
+                    bat 'ibmcloud cr login'
                 }
             }
         }
-        stage('Check PATH') {
+        stage('Push Docker Images to IBM Cloud Container Registry') {
             steps {
                 script {
-                    bat 'echo %PATH%'
+                    bat 'docker push icr.io/ibm-eventspeare/backend-service:latest'
+                    bat 'docker push icr.io/ibm-eventspeare/front-service:latest'
                 }
             }
         }
-
-        stage('Set Minikube Context') {
+        stage('Create Kubernetes Secret for IBM Container Registry') {
             steps {
                 script {
-                   bat '"C:\\Program Files\\Kubernetes\\Minikube\\minikube.exe" start'
-                //    bat '"C:\\Program Files\\Kubernetes\\Minikube\\minikube.exe" status || "C:\\Program Files\\Kubernetes\\Minikube\\minikube.exe" start'
-                    bat '"C:\\Program Files\\Kubernetes\\Minikube\\minikube.exe" update-context'
-
+                    bat 'kubectl create secret docker-registry ibm-cloud-secret --docker-server=icr.io --docker-username=iamapikey --docker-password=%IBM_API_KEY% --docker-email=reddykiranbcse2025@gmail.com'
                 }
             }
         }
-        stage('Deploy to Minikube') {
+        stage('Deploy to IBM Kubernetes Service') {
             steps {
                 script {
                     // Apply Kubernetes manifests for backend and frontend deployments
                     bat 'kubectl apply -f deploy/backend-deployment.yaml'
                     bat 'kubectl apply -f deploy/frontend-deployment.yaml'
 
-                    // Check the deployment status
-                    // bat 'kubectl rollout status deployment/eventsphere-backend'
-                    // bat 'kubectl rollout status deployment/eventsphere-frontend'
-
                     // Verify the running pods and services
                     bat 'kubectl get pods'
                     bat 'kubectl get services'
-                }
-            }
-        }
-        stage('Port-Forward to Local Machine') {
-            steps {
-                script {
-                    // Forward the backend service to localhost:5000
-                    bat 'start "" cmd /c "kubectl port-forward service/eventsphere-backend 5000:5000"'
-
-                    // Forward the frontend service to localhost:3000
-                    bat 'start "" cmd /c "kubectl port-forward service/eventsphere-frontend 3000:3000"'
                 }
             }
         }
