@@ -27,26 +27,35 @@
 
 # # Start NGINX
 # CMD ["nginx", "-g", "daemon off;"]
+# Stage 1: Build Stage
+FROM node:18 as builder
 
-
-
-# Use a Node.js base image
-FROM node:18
-
-# Set the working directory in the container
+# Set the working directory
 WORKDIR /app
 
 # Copy package.json and package-lock.json
 COPY package*.json ./
 
-# Install frontend dependencies
+# Install dependencies
 RUN npm install
 
-# Copy the rest of the application code
+# Copy the application source code
 COPY . .
 
-# Expose the port React is running on
+# Build the production-ready React app
+RUN npm run build
+
+# Stage 2: Runtime Stage
+FROM node:18-alpine
+
+# Set the working directory
+WORKDIR /app
+
+# Copy only the built files from the build stage
+COPY --from=builder /app/build /app/build
+
+# Expose the application port
 EXPOSE 3000
 
-# Start React development server (or production server if build)
-CMD ["npm", "start"]
+# Serve the production build with React's development server
+CMD ["npx", "serve", "-s", "/app/build", "-l", "3000"]

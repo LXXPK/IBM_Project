@@ -14,12 +14,14 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: kiran186/eventsphere-frontend:latest
+        image: icr.io/eventspeare/front-service:latest
         ports:
         - containerPort: 3000
         env:
         - name: REACT_APP_API_URL
           value: "http://eventsphere-backend:5000"
+      imagePullSecrets:
+      - name: cloud-secret
 ---
 apiVersion: v1
 kind: Service

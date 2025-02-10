@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: kiran186/eventsphere-backend:latest
+        image: icr.io/eventspeare/backend-service:latest
         ports:
         - containerPort: 5000
         env:
@@ -28,6 +28,8 @@ spec:
             secretKeyRef:
               name: jwt-secret
               key: jwt-secret  # Key inside the secret
+      imagePullSecrets:
+      - name: cloud-secret
 ---
 apiVersion: v1
 kind: Service
