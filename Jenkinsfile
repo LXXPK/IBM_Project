@@ -57,6 +57,7 @@ pipeline {
             steps {
                 script {
                     bat 'ibmcloud login --apikey %IBM_API_KEY% -r in-che'
+                    bat 'ibmcloud plugin list | findstr "container-registry" || ibmcloud plugin install container-registry'
                     bat 'ibmcloud cr login'
                 }
             }
