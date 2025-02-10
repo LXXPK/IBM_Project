@@ -42,7 +42,8 @@ pipeline {
         stage('Test Frontend') {
             steps {
                 script {
-                    bat 'cd user && npm test -- --passWithNoTests'
+                     bat 'cd user && npm install' // Install all dependencies, including devDependencies
+                    bat 'cd user && npm test -- --passWithNoTests' // Run frontend tests
                 }
             }
         }
