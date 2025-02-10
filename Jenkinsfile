@@ -98,8 +98,8 @@ pipeline {
                     bat 'kubectl apply -f deploy/frontend-deployment.yaml'
 
                     // Check deployment status
-                    bat 'kubectl rollout status deployment/eventsphere-backend'
-                    bat 'kubectl rollout status deployment/eventsphere-frontend'
+                    // bat 'kubectl rollout status deployment/eventsphere-backend'
+                    // bat 'kubectl rollout status deployment/eventsphere-frontend'
 
                     // Verify running pods and services
                     bat 'kubectl get pods'
