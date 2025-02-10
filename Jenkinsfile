@@ -70,13 +70,13 @@ pipeline {
                 }
             }
         }
-        stage('Create Kubernetes Secret for IBM Container Registry') {
-            steps {
-                script {
-                    bat 'kubectl get secret ibm-cloud-secret'
-                }
-            }
-        }
+        // stage('Create Kubernetes Secret for IBM Container Registry') {
+        //     steps {
+        //         script {
+        //             bat 'kubectl get secret ibm-cloud-secret'
+        //         }
+        //     }
+        // }
         stage('Deploy to IBM Kubernetes Service') {
             steps {
                 script {
