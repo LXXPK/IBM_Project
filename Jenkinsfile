@@ -56,7 +56,7 @@ pipeline {
         stage('Login to IBM Cloud and IBM Container Registry') {
             steps {
                 script {
-                    bat 'ibmcloud login --apikey %IBM_API_KEY%'
+                    bat 'ibmcloud login --apikey %IBM_API_KEY% -r in-che'
                     bat 'ibmcloud cr login'
                 }
             }
