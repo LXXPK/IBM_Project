@@ -35,6 +35,7 @@ pipeline {
             steps {
                 script {
                     bat 'cd server && npm test'
+                      bat 'cd server && npm test'
                 }
             }
         }
