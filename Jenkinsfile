@@ -73,7 +73,7 @@ pipeline {
         stage('Create Kubernetes Secret for IBM Container Registry') {
             steps {
                 script {
-                    bat 'kubectl create secret docker-registry ibm-cloud-secret --docker-server=icr.io --docker-username=iamapikey --docker-password=%IBM_API_KEY% --docker-email=reddykiranbcse2025@gmail.com'
+                    bat 'kubectl create secret docker-registry ibm-cloud-secret --docker-server=icr.io --docker-username=iamapikey --docker-password=%IBM_API_KEY% --docker-email=kiranbcse2025@gmail.com'
                 }
             }
         }
