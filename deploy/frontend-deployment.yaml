@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: kiran186/eventsphere-frontend:latest
+        image: icr.io/ibm-eventspeare/backend-service:latest
         ports:
         - containerPort: 3000
         env:

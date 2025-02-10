@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: eventsphere-backend
 spec:
-  replicas: 1  # Set the number of replicas
+  replicas: 1  
   selector:
     matchLabels:
       app: eventsphere-backend
@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: kiran186/eventsphere-backend:latest
+        image: icr.io/ibm-eventspeare/front-service:latest
         ports:
         - containerPort: 5000
         env:
@@ -22,12 +22,12 @@ spec:
           valueFrom:
             secretKeyRef:
               name: mongo-uri-secret
-              key: mongo-uri  # Key inside the secret
+              key: mongo-uri  
         - name: JWT_SECRET
           valueFrom:
             secretKeyRef:
               name: jwt-secret
-              key: jwt-secret  # Key inside the secret
+              key: jwt-secret  
 ---
 apiVersion: v1
 kind: Service

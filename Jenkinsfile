@@ -47,8 +47,8 @@ pipeline {
         stage('Build Docker Images') {
             steps {
                 script {
-                    bat 'docker build -t eventsphere-backend ./server'
-                    bat 'docker build -t eventsphere-frontend ./user'
+                    bat 'docker build -t ibm-eventspeare/eventsphere-backend ./server'
+                    bat 'docker build -t ibm-eventspeare/eventsphere-frontend ./user'
                 }
             }
         }
