@@ -29,24 +29,35 @@
 # CMD ["nginx", "-g", "daemon off;"]
 
 
+# Build Stage
+FROM node:18-alpine AS build
 
-# Use a Node.js base image
-FROM node:18
-
-# Set the working directory in the container
+# Set the working directory in the build container
 WORKDIR /app
 
 # Copy package.json and package-lock.json
 COPY package*.json ./
 
-# Install frontend dependencies
+# Install only dependencies
 RUN npm install
 
 # Copy the rest of the application code
 COPY . .
 
-# Expose the port React is running on
-EXPOSE 3000
+# Build the React app for production
+RUN npm run build
 
-# Start React development server (or production server if build)
-CMD ["npm", "start"]
+# Production Stage
+FROM nginx:alpine
+
+# Copy custom Nginx configuration file
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Copy built files from the build container
+COPY --from=build /app/build /usr/share/nginx/html
+
+# Expose the port Nginx will run on
+EXPOSE 80
+
+# Start Nginx
+CMD ["nginx", "-g", "daemon off;"]
