@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: icr.io/ibm-eventspeare/front-service:latest
+        image: icr.io/ibm-eventspeare/backend-service:latest
         ports:
         - containerPort: 5000
         env:
