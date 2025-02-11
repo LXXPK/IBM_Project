@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: eventsphere-backend
 spec:
-  replicas: 1  # Set the number of replicas
+  replicas: 1  
   selector:
     matchLabels:
       app: eventsphere-backend
@@ -22,12 +22,12 @@ spec:
           valueFrom:
             secretKeyRef:
               name: mongo-uri-secret
-              key: mongo-uri  # Key inside the secret
+              key: mongo-uri  
         - name: JWT_SECRET
           valueFrom:
             secretKeyRef:
               name: jwt-secret
-              key: jwt-secret  # Key inside the secret
+              key: jwt-secret 
       imagePullSecrets:
       - name: cloud-secret
 ---

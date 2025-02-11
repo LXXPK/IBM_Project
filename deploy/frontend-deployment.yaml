@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: eventsphere-frontend
 spec:
-  replicas: 1  # Set the number of replicas
+  replicas: 1  
   selector:
     matchLabels:
       app: eventsphere-frontend
