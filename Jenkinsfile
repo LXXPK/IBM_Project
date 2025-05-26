@@ -50,8 +50,8 @@ pipeline {
         stage('Build Docker Images') {
             steps {
                 script {
-                    bat 'docker build -t icr.io/eventspeare/backend-service:latest ./server'
-                    bat 'docker build -t icr.io/eventspeare/front-service:latest ./user'
+                    bat 'docker build -t icr.io/name/backend-service:latest ./server'
+                    bat 'docker build -t icr.io/name/front-service:latest ./user'
                 }
             }
         }
@@ -66,8 +66,8 @@ pipeline {
         stage('Publish Docker Images to IBM Cloud Registry') {
             steps {
                 script {
-                    bat 'docker push icr.io/eventspeare/backend-service:latest'
-                    bat 'docker push icr.io/eventspeare/front-service:latest'
+                    bat 'docker push icr.io/name/backend-service:latest'
+                    bat 'docker push icr.io/name/front-service:latest'
                 }
             }
         }
