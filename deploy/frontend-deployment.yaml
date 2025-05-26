@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: icr.io/eventspeare/front-service:latest
+        image: icr.io/name/front-service:latest
         ports:
         - containerPort: 3000
         env:
