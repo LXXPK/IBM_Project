@@ -77,16 +77,49 @@ pipeline {
         //         }
         //     }
         // }
+        // stage('Deploy to IBM Kubernetes Service') {
+        //     steps {
+        //         script {
+        //             // Apply Kubernetes manifests for backend and frontend deployments
+        //             bat 'kubectl apply -f deploy/backend-deployment.yaml'
+        //             bat 'kubectl apply -f deploy/frontend-deployment.yaml'
+
+        //             // Verify the running pods and services
+        //             bat 'kubectl get pods'
+        //             bat 'kubectl get services'
+        //         }
+        //     }
+        // }
+
+        stage('Set Minikube Context') {
+            steps {
+                script {
+                   bat '"C:\\Program Files\\Kubernetes\\Minikube\\minikube.exe" start'
+                //    bat '"C:\\Program Files\\Kubernetes\\Minikube\\minikube.exe" status || "C:\\Program Files\\Kubernetes\\Minikube\\minikube.exe" start'
+                    bat '"C:\\Program Files\\Kubernetes\\Minikube\\minikube.exe" update-context'
+
+                }
+            }
+        }
         stage('Deploy to IBM Kubernetes Service') {
             steps {
                 script {
-                    // Apply Kubernetes manifests for backend and frontend deployments
+                    
                     bat 'kubectl apply -f deploy/backend-deployment.yaml'
                     bat 'kubectl apply -f deploy/frontend-deployment.yaml'
 
-                    // Verify the running pods and services
+                
                     bat 'kubectl get pods'
                     bat 'kubectl get services'
+                }
+            }
+        }
+        stage('Port-Forward to Local Machine') {
+            steps {
+                script {
+                    
+                    bat 'start "" cmd /c "kubectl port-forward service/eventsphere-backend 5000:5000"'
+                    bat 'start "" cmd /c "kubectl port-forward service/eventsphere-frontend 3000:3000"'
                 }
             }
         }
